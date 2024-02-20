@@ -1,7 +1,8 @@
 <?php
 
-$pageTitle = "hello-world";
-require_once __DIR__ . "/../includes/header.php";
+$pageTitle = 'hello-world';
+require_once __DIR__ . '/../../config/config.php';
+require_once __DIR__ . '/../includes/header.php';
 
 ?>
 
@@ -18,7 +19,7 @@ require_once __DIR__ . "/../includes/header.php";
           <div class="columns">
             <div class="column">
               <div class="box">
-                <p><?= "Hello, world!"; ?></p>
+                <p><?= 'Hello, world!'; ?></p>
               </div>
             </div>
           </div>
@@ -28,6 +29,6 @@ require_once __DIR__ . "/../includes/header.php";
 
 <?php
 
-require_once __DIR__ . "/../includes/footer.php";
+require_once __DIR__ . '/../includes/footer.php';
 
 ?>
