@@ -17,38 +17,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   if (in_array($input, $_SESSION['correctLetters']) || in_array($input, $_SESSION['incorrectLetters'])) {
     $_SESSION['attempts'] += 1;
+    
+    if ($_SESSION['attempts'] === 10) {
+      $_SESSION['initialized'] = false;
+      header('refresh: 0');
+    }
+
     return;
   }
 
   $letters = str_split($_SESSION['word']);
-  $letterFound = false;
 
   foreach ($letters as $key => $letter) {
-    if ($letter !== $input) { continue; }
-
-    $_SESSION['correctCount'] += 1;
-      
-    if (!in_array($input, $_SESSION['correctLetters'])) {
-      $letterFound = true;
+    if ($letter === $input) {
       array_push($_SESSION['correctLetters'], $input);
+      break;
+    }
+    
+    if ($key === array_key_last($letters)) {
+      $_SESSION['attempts'] += 1;
+      array_push($_SESSION['incorrectLetters'], $input);
     }
   }
 
-  if (!$letterFound) {
-    $_SESSION['attempts'] += 1;
-    array_push($_SESSION['incorrectLetters'], $input);
-  }
-
-  // TODO: DEBUG
-  if ($_SESSION['attempts'] >= 10) {
+  if ($_SESSION['attempts'] === 10) {
     $_SESSION['initialized'] = false;
     header('refresh: 0');
+    return;
   }
 
-  if ($_SESSION['correctCount'] === strlen($_SESSION['word'])) {
-    $_SESSION['initialized'] = false;
-    array_push($_SESSION['guessedWords'], $_SESSION['word']);
-    header('refresh: 0');
+  foreach ($letters as $key => $letter) {
+    if (!in_array($letter, $_SESSION['correctLetters'])) { break; }
+
+    if ($key === array_key_last($letters)) {
+      $_SESSION['initialized'] = false;
+      array_push($_SESSION['guessedWords'], $_SESSION['word']);
+      header('refresh: 0');
+    }
   }
 }
 
@@ -58,7 +63,6 @@ function initialize() {
   $_SESSION['initialized'] = true;
   $_SESSION['word'] = $words[rand(0, 9)];
   $_SESSION['attempts'] = 0;
-  $_SESSION['correctCount'] = 0;
   $_SESSION['correctLetters'] = array();
   $_SESSION['incorrectLetters'] = array();
 
