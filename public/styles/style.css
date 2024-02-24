@@ -6,3 +6,8 @@ footer img {
   width: 128px;
   height: 24px;
 }
+
+#calendar td {
+  width: 14.2vw;
+  height: 12.5vh;
+}
